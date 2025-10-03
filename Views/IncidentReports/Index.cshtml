@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ReliefConnect.Models.IncidentReport>
+@{
+    ViewData["Title"] = "Incident Reports";
+}
+<h2>Incident Reports</h2>
+
+<p><a asp-action="Create" class="btn btn-primary">+ Report Incident</a></p>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Severity</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.Title</td>
+                    <td>@r.Location</td>
+                    <td>@r.Severity</td>
+                    <td>@r.ReportedAt.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No incidents reported yet.</p>
+}

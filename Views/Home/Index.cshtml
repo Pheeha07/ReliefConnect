@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center my-5">
+    <h1 class="display-4" style="color:#6f42c1;">Welcome to ReliefConnect</h1>
+    <p class="lead">Connecting communities with support during disasters.</p>
+
+    <div class="mt-4">
+        <a class="btn btn-primary btn-lg mx-2" asp-controller="IncidentReports" asp-action="Create">Report Incident</a>
+        <a class="btn btn-success btn-lg mx-2" asp-controller="Donations" asp-action="Create">Donate Now</a>
+        <a class="btn btn-secondary btn-lg mx-2" asp-controller="VolunteerTasks" asp-action="Index">Volunteer</a>
+    </div>
+</div>
+
+<div class="row text-center mt-5">
+    <div class="col-md-4">
+        <h3 style="color:#6f42c1;">🌍 Disaster Reports</h3>
+        <p>Stay updated on incidents and emergencies in your area.</p>
+    </div>
+    <div class="col-md-4">
+        <h3 style="color:#6f42c1;">💜 Donations</h3>
+        <p>Support communities with food, clothing, and resources.</p>
+    </div>
+    <div class="col-md-4">
+        <h3 style="color:#6f42c1;">🤝 Volunteer</h3>
+        <p>Join tasks, track your impact, and help where it’s needed most.</p>
+    </div>
+</div>

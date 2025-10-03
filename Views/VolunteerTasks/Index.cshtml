@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ReliefConnect.Models.VolunteerTask>
+@{
+    ViewData["Title"] = "Volunteer Tasks";
+}
+<h2>Volunteer Tasks</h2>
+
+<p><a asp-action="Create" class="btn btn-primary">+ Create Volunteer Task</a></p>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Capacity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model)
+            {
+                <tr>
+                    <td>@t.Title</td>
+                    <td>@t.StartTime</td>
+                    <td>@t.EndTime</td>
+                    <td>@t.Capacity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No volunteer tasks available.</p>
+}

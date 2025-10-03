@@ -1,0 +1,27 @@
+﻿@model ReliefConnect.Models.Donation
+@{
+    ViewData["Title"] = "Make a Donation";
+}
+<h2>Make a Donation</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Amount" class="form-label"></label>
+        <input asp-for="Amount" class="form-control" />
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="PaymentMethod" class="form-label"></label>
+        <select asp-for="PaymentMethod" class="form-select">
+            <option value="Cash">Cash</option>
+            <option value="Card">Card</option>
+            <option value="EFT">EFT</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Donate</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

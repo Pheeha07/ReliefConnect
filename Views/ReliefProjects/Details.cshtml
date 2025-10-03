@@ -1,0 +1,17 @@
+﻿@model ReliefConnect.Models.ReliefProject
+@{
+    ViewData["Title"] = "Project Details";
+}
+<h2>Project Details</h2>
+
+<div class="card p-3">
+    <h4>@Model.Title</h4>
+    <p><strong>Description:</strong> @Model.Description</p>
+    <p><strong>Location:</strong> @Model.Location</p>
+    <p><strong>Date Created:</strong> @Model.DateCreated</p>
+</div>
+
+<p class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary">Back to Projects</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+</p>

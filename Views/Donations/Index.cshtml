@@ -1,0 +1,34 @@
+﻿@model IEnumerable<ReliefConnect.Models.Donation>
+@{
+    ViewData["Title"] = "Donations";
+}
+<h2>Donations</h2>
+
+<p><a asp-action="Create" class="btn btn-primary">+ Make a Donation</a></p>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Payment Method</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in Model)
+            {
+                <tr>
+                    <td>@d.Amount</td>
+                    <td>@d.PaymentMethod</td>
+                    <td>@d.Date.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No donations yet.</p>
+}

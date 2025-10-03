@@ -1,0 +1,32 @@
+﻿@model IEnumerable<ReliefConnect.Models.VolunteerAssignment>
+@{
+    ViewData["Title"] = "My Assignments";
+}
+<h2>My Assignments</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Status</th>
+                <th>Assigned At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td>@(((ReliefConnect.Models.VolunteerTask)a.VolunteerTask).Title)</td>
+                    <td>@a.Status</td>
+                    <td>@a.AssignedAt</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You have no assignments yet.</p>
+}

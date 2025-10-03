@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ReliefConnect.Models.ReliefProject>
+@{
+    ViewData["Title"] = "Relief Projects";
+}
+<h2>Relief Projects</h2>
+
+<p><a asp-action="Create" class="btn btn-primary">+ Create New Project</a></p>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.Title</td>
+                    <td>@p.Location</td>
+                    <td>@p.DateCreated.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@p.Id">View</a> |
+                        <a asp-action="Edit" asp-route-id="@p.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@p.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No projects found.</p>
+}
