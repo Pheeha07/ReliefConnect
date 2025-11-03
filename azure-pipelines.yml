@@ -1,0 +1,91 @@
+# azure-pipelines.yml
+# CI for ReliefConnect (.NET 8 + xUnit). Builds, tests, publishes artifacts.
+trigger:
+  branches:
+    include:
+      - master
+      - main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  BuildConfiguration: 'Release'
+  Solution: 'ReliefConnect.sln'
+  TestProject: 'ReliefConnect.Tests/ReliefConnect.Tests.csproj'
+  ArtifactName: 'drop'
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET 8 SDK'
+    inputs:
+      packageType: 'sdk'
+      version: '8.x'
+
+  - task: NuGetToolInstaller@1
+    displayName: 'Install NuGet'
+
+  - task: NuGetCommand@2
+    displayName: 'Restore NuGet'
+    inputs:
+      restoreSolution: '$(Solution)'
+
+  - task: VSBuild@1
+    displayName: 'Build solution'
+    inputs:
+      solution: '$(Solution)'
+      configuration: '$(BuildConfiguration)'
+      msbuildArgs: '/p:GenerateFullPaths=true /p:RunCodeAnalysis=false'
+      clean: true
+      restoreNugetPackages: false
+
+  - script: |
+      dotnet test "$(TestProject)" -c $(BuildConfiguration) ^
+        --logger "trx;LogFileName=test-results.trx" ^
+        /p:CollectCoverage=true /p:CoverletOutput=$(Build.SourcesDirectory)\TestCoverage\ ^
+        /p:CoverletOutputFormat=cobertura
+    displayName: 'Run tests with coverage'
+
+  - task: PublishTestResults@2
+    displayName: 'Publish test results'
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: 'VSTest'
+      testResultsFiles: '**/test-results.trx'
+      searchFolder: '$(System.DefaultWorkingDirectory)'
+      testRunTitle: 'ReliefConnect CI Tests'
+
+  - task: PublishCodeCoverageResults@2
+    displayName: 'Publish code coverage'
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(Build.SourcesDirectory)/TestCoverage/coverage.cobertura.xml'
+      reportDirectory: '$(Build.SourcesDirectory)/TestCoverage'
+      failIfCoverageEmpty: false
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish web app'
+    inputs:
+      command: 'publish'
+      publishWebProjects: true
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+      zipAfterPublish: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish artifact'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: '$(ArtifactName)'
+      publishLocation: 'Container'
+
+# Optional deployment stage (kept commented due to permission limits)
+# stages:
+# - stage: Deploy
+#   jobs:
+#   - job: DeployToAzure
+#     steps:
+#     - task: AzureWebApp@1
+#       inputs:
+#         azureSubscription: 'SERVICE_CONNECTION_NAME'
+#         appName: 'ReliefConnect-WebApp'
+#         package: '$(Pipeline.Workspace)/drop/**/*.zip'
